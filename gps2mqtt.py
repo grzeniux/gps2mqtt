@@ -27,3 +27,36 @@ try:
 except Exception as e:
     print(f"Error connecting to MQTT broker: {e}")
     exit(1)
+
+def publish_gps_data():
+    try:
+        gpsd_data = gpsd.get_current()
+        if gpsd_data.mode >= 2:
+            latitude = gpsd_data.lat
+            longitude = gpsd_data.lon
+            altitude = gpsd_data.alt  # height
+            track = gpsd_data.track  # Direction of movement in degrees
+            sats = gpsd_data.sats  # Number of visible satellites
+            time_utc = gpsd_data.time  # UTC time
+
+            # Converting time to CET/CEST (Central European Summer/Winter Time) zone.
+            utc_dt = datetime.strptime(time_utc, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=pytz.utc)
+            cest = pytz.timezone('Europe/Warsaw')
+            time_cest = utc_dt.astimezone(cest).strftime('%Y-%m-%d %H:%M:%S')
+
+            if latitude and longitude:
+                client.publish(mqtt_topics['latitude'], latitude)
+                client.publish(mqtt_topics['longitude'], longitude)
+                client.publish(mqtt_topics['altitude'], altitude)
+                client.publish(mqtt_topics['track'], track)
+                client.publish(mqtt_topics['satellites'], sats)
+                client.publish(mqtt_topics['time'], time_cest)
+
+                print(f"Latitude: {latitude}, Longitude: {longitude}")
+                print(f"Altitude: {altitude}, Track: {track}, Satellites: {sats}")
+                print(f"Time (CEST/CET): {time_cest}")
+
+    except KeyError:
+        pass
+    except Exception as e:
+        print(f"Error in publish_gps_data: {e}")
