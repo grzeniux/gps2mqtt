@@ -17,6 +17,16 @@ mqtt_topics = config['mqtt']['topics']
 
 gpsd.connect()
 
+# Callback functions to debug an MQTT connection
+def on_connect(client, userdata, flags, rc, properties=None):
+    if rc == 0:
+        print("Connected to MQTT broker.")
+    else:
+        print(f"Failed to connect to MQTT broker. Return code: {rc}")
+
+def on_publish(client, userdata, mid):
+    print(f"Data published. Message ID: {mid}")
+
 # MQTT client configuration
 client = mqtt.Client(client_id=mqtt_client_id, protocol=mqtt.MQTTv311)
 client.on_connect = on_connect
