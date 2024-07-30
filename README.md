@@ -1,5 +1,13 @@
 # GPS to MQTT
+This project reads GPS data from a GPSD daemon and publishes it to an MQTT broker. It uses a systemd service to run the Python script automatically on boot. The configuration, including MQTT topics, is managed through a JSON file.
 
+## Import Explanations
+- **os**: System operations and file management.
+- **json**: Loading configuration from a JSON file.
+- **paho.mqtt.client as mqtt**: Publishing GPS data to an MQTT broker.
+- **gpsd**: Fetching GPS data from the GPSD daemon.
+- **pytz**: Converting time to the appropriate time zone.
+- **from datetime import datetime**: Processing and formatting dates and times.
 
 ## Setup
 1. Create venv
@@ -19,3 +27,4 @@ sudo systemctl enable gps2mqtt.service
 sudo systemctl start gps2mqtt.service
 sudo systemctl status gps2mqtt.service
 ```
+5. Add topics to **.json** file
