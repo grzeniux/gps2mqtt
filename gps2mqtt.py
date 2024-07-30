@@ -5,6 +5,7 @@ import gpsd
 import pytz
 from datetime import datetime
 
+# Load configuration from JSON file
 config_path = 'config.json'
 with open(config_path) as config_file:
     config = json.load(config_file)
