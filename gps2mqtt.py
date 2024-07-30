@@ -60,3 +60,6 @@ def publish_gps_data():
         pass
     except Exception as e:
         print(f"Error in publish_gps_data: {e}")
+
+while True:
+    publish_gps_data()
