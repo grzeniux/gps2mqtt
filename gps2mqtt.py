@@ -14,3 +14,4 @@ mqtt_port = config['mqtt']['port']
 mqtt_client_id = config['mqtt']['clientIdentifier']
 mqtt_topics = config['mqtt']['topics']
 
+gpsd.connect()
