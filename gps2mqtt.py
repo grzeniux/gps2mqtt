@@ -5,6 +5,14 @@ import gpsd
 import pytz
 from datetime import datetime
 
+class Location:
+    def __init__(self, latitude, longitude):
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __repr__(self):
+        return f"Location(latitude={self.latitude}, longitude={self.longitude})"
+
 # Load configuration from JSON file
 config_path = 'config.json'
 with open(config_path) as config_file:
@@ -43,8 +51,8 @@ def publish_gps_data():
     try:
         gpsd_data = gpsd.get_current()
         if gpsd_data.mode >= 2:
-            latitude = gpsd_data.lat
-            longitude = gpsd_data.lon
+            location = Location(gpsd_data.lat, gpsd_data.lon)
+
             altitude = gpsd_data.alt  # height
             track = gpsd_data.track  # Direction of movement in degrees
             sats = gpsd_data.sats  # Number of visible satellites
@@ -55,15 +63,15 @@ def publish_gps_data():
             cest = pytz.timezone('Europe/Warsaw')
             time_cest = utc_dt.astimezone(cest).strftime('%Y-%m-%d %H:%M:%S')
 
-            if latitude and longitude:
-                client.publish(mqtt_topics['latitude'], latitude)
-                client.publish(mqtt_topics['longitude'], longitude)
+            if location.latitude and location.longitude:
+                client.publish(mqtt_topics['latitude'], location.latitude)
+                client.publish(mqtt_topics['longitude'], location.longitude)
                 client.publish(mqtt_topics['altitude'], altitude)
                 client.publish(mqtt_topics['track'], track)
                 client.publish(mqtt_topics['satellites'], sats)
                 client.publish(mqtt_topics['time'], time_cest)
 
-                print(f"Latitude: {latitude}, Longitude: {longitude}")
+                print(f"Location: {location}")
                 print(f"Altitude: {altitude}, Track: {track}, Satellites: {sats}")
                 print(f"Time (CEST/CET): {time_cest}")
 
