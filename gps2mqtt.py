@@ -15,3 +15,15 @@ mqtt_client_id = config['mqtt']['clientIdentifier']
 mqtt_topics = config['mqtt']['topics']
 
 gpsd.connect()
+
+# MQTT client configuration
+client = mqtt.Client(client_id=mqtt_client_id, protocol=mqtt.MQTTv311)
+client.on_connect = on_connect
+client.on_publish = on_publish
+
+try:
+    client.connect(mqtt_server, mqtt_port, 60)
+    client.loop_start()  # Starts the background processing loop
+except Exception as e:
+    print(f"Error connecting to MQTT broker: {e}")
+    exit(1)
