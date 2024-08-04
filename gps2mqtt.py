@@ -64,11 +64,15 @@ def publish_gps_data():
             time_cest = utc_dt.astimezone(cest).strftime('%Y-%m-%d %H:%M:%S')
 
             if location.latitude and location.longitude:
-                client.publish(mqtt_topics['latitude'], location.latitude)
-                client.publish(mqtt_topics['longitude'], location.longitude)
-                client.publish(mqtt_topics['altitude'], altitude)
-                client.publish(mqtt_topics['track'], track)
-                client.publish(mqtt_topics['satellites'], sats)
+                location_json = json.dumps({
+                    'latitude': location.latitude,
+                    'longitude': location.longitude
+                })
+
+                client.publish(mqtt_topics['1'], location_json)
+                client.publish(mqtt_topics['altitude'], str(altitude))
+                client.publish(mqtt_topics['track'], str(track))
+                client.publish(mqtt_topics['satellites'], str(sats))
                 client.publish(mqtt_topics['time'], time_cest)
 
                 print(f"Location: {location}")
