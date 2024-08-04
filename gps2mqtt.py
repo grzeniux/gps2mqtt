@@ -11,7 +11,7 @@ class Location:
         self.longitude = longitude
 
     def __repr__(self):
-        return f"Location(latitude={self.latitude}, longitude={self.longitude})"
+        return f"Location(Lat={self.latitude}, Lon={self.longitude})"
 
 # Load configuration from JSON file
 config_path = 'config.json'
@@ -65,8 +65,8 @@ def publish_gps_data():
 
             if location.latitude and location.longitude:
                 location_json = json.dumps({
-                    'latitude': location.latitude,
-                    'longitude': location.longitude
+                    'Lat': location.latitude,
+                    'Long': location.longitude
                 })
 
                 client.publish(mqtt_topics['1'], location_json)
