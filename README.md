@@ -9,6 +9,7 @@ This project reads GPS data from a GPSD daemon and publishes it to an MQTT broke
 - **pytz**: Converting time to the appropriate time zone.
 - **from datetime import datetime**: Processing and formatting dates and times.
 
+
 ## Setup
 1. Create venv
 ```sh
@@ -28,3 +29,11 @@ sudo systemctl start gps2mqtt.service
 sudo systemctl status gps2mqtt.service
 ```
 5. Add topics to **.json** file
+
+
+## Info
+How to restart service?:
+```sh
+sudo systemctl daemon-reload
+sudo systemctl restart gps2mqtt.service
+```
