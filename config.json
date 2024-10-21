@@ -1,0 +1,30 @@
+{
+  "mqtt": {
+    "server": "localhost",
+    "clientIdentifier": "flutter_client",
+    "port": 1883,
+    "logging": false,
+    "topics": {
+      "speed": "double/100",
+      "batteryCharge": "double/3000",
+      "shifter": "double/10101", 
+      "motorcycleRotation": "double/3001",
+      "voltageLevel": "double/1000",
+      "batteryTemperature": "double/200",
+      "liquidTemperature": "double/201",
+      "frontTirePressure": "double/110",
+      "distanceTravelled": "double/10116",
+      "averageSpeed": "double/101",
+      "rearTirePressure": "double/111",
+      "disconnect": "disconnect"
+    },
+    "rounding": {
+      "voltageLevel": 1,
+      "speed": 1,
+      "motorcycleRotation": 1,
+      "listTile": 1,
+      "shifterUsage": 1,
+      "batteryCharge" : 0
+    }
+  }
+}
