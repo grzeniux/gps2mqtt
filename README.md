@@ -43,4 +43,11 @@ sudo systemctl restart gps2mqtt.service
 I decided to enter coorditans on a rail to test the performance of the code.
 From the page [Overpass](https://overpass-turbo.eu/) I downloaded a .json file with the coordinates of the Aragon track
 
+Here's how I got the coordinates:
+```sh
+area["name"="Motorland Aragón"];
+way(area)["highway"="raceway"]["name"="Motorland Aragón WTCR 2"];
+out geom;
+```
+
 
