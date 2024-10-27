@@ -37,3 +37,10 @@ How to restart service?:
 sudo systemctl daemon-reload
 sudo systemctl restart gps2mqtt.service
 ```
+
+
+
+I decided to enter coorditans on a rail to test the performance of the code.
+From the page [Overpass](https://overpass-turbo.eu/) I downloaded a .json file with the coordinates of the Aragon track
+
+
