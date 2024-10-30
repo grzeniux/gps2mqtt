@@ -44,26 +44,26 @@ This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive
 4. **Create the Systemd Service File**:
     - To run `gps_logger.py` as a service on boot, create a service file for systemd:
     1. Open a new file in the `/etc/systemd/system/` directory:
-    ```sh
-    sudo nano /etc/systemd/system/gps_logger.service
-    ```
+        ```sh
+        sudo nano /etc/systemd/system/gps_logger.service
+        ```
     2. Paste the following configuration into the file:
-    ```sh
-    [Unit]
-    Description=GPS Logger to USB Pendrive
-    After=gpsd.service
+        ```sh
+        [Unit]
+        Description=GPS Logger to USB Pendrive
+        After=gpsd.service
 
-    [Service]
-    ExecStart=/home/pi/gps-venv/bin/python /home/pi/gps/gps_logger.py
-    WorkingDirectory=/home/pi/gps
-    User=root
-    Environment="PATH=/home/pi/gps-venv/bin:$PATH"
-    Restart=always
-    RestartSec=5
+        [Service]
+        ExecStart=/home/pi/gps-venv/bin/python /home/pi/gps/gps_logger.py
+        WorkingDirectory=/home/pi/gps
+        User=root
+        Environment="PATH=/home/pi/gps-venv/bin:$PATH"
+        Restart=always
+        RestartSec=5
 
-    [Install]
-    WantedBy=multi-user.target
-    ```
+        [Install]
+        WantedBy=multi-user.target
+        ```
 
 5. **Systemd Service Configuration**:
    - Configure and enable the `gps_logger.py` service to start logging GPS data on USB disk.
