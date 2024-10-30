@@ -15,6 +15,17 @@ This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive
 
 ## Setup Instructions
 1. **Connect GPSD**: Ensure `gpsd` daemon is running and properly configured to provide GPS data.
+    - In order to ensure `gpsd` consistently provides GPS data, additional configuration in `/etc/default/gpsd` is required.
+    ```sh
+    sudo nano /etc/default/gpsd
+    ```
+    ```sh
+    START_DAEMON="true"
+    GPSD_OPTIONS="-n"
+    DEVICES="/dev/ttyACM0"
+    USBAUTO="true"
+    GPSD_SOCKET="/var/run/gpsd.sock"
+    ```
     ```sh
     sudo systemctl stop gpsd.service
     sudo systemctl stop gpsd.socket
@@ -24,6 +35,8 @@ This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive
 
     sudo systemctl enable gpsd.service
     sudo systemctl enable gpsd.socket
+
+    sudo systemctl restart gpsd
     ```
 
 2. **USB Configuration**:
