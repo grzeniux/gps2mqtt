@@ -1,5 +1,8 @@
+import gpsd
+import json
 import time
 from threading import Thread, Lock
+import os
 import subprocess
 
 # Global variables for frequently used paths and parameters
@@ -49,3 +52,37 @@ def unmount_usb():
             print("Pendrive unmounted.")
         except subprocess.CalledProcessError as e:
             print(f"Error unmounting pendrive: {e}")
+
+def read_gps_data():
+    """Read GPS data and add it to the buffer."""
+    gpsd.connect()
+    while True:
+        try:
+            packet = gpsd.get_current()
+            print("Received GPS data:", packet)
+            print("Positioning mode (mode):", packet.mode)
+            
+            if packet.mode >= 2:  # Ensure GPS lock is good
+                gps_data = {
+                    "timestamp": time.time(),
+                    "latitude": packet.lat,
+                    "longitude": packet.lon,
+                    "altitude": packet.alt,
+                    "speed_kmh": packet.hspeed * 3.6 if packet.hspeed is not None else None,
+                    "track": packet.track,
+                    "sats": packet.sats,
+                    "time_utc": packet.time
+                }
+                with data_lock:
+                    gps_data_log.append(gps_data)
+                print("GPS data added:", gps_data)
+                print("Current GPS log buffer size:", len(gps_data_log))  # Debug: size of buffer after adding data
+            else:
+                print("No adequate GPS signal (mode < 2).")
+            time.sleep(1)
+        except Exception as e:
+            print(f"Error reading GPS data: {e}")
+
+gps_thread = Thread(target=read_gps_data, daemon=True)
+gps_thread.start()
+
