@@ -1,0 +1,52 @@
+# GPS USB Data Logger
+
+This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive, providing offline data storage and easy access to GPS information. The data is continuously logged, even if the USB drive is temporarily disconnected, using a multithreaded Python script. The system remounts the USB drive if it becomes unmounted, ensuring data continuity.
+
+## Features
+- **GPS Data Logging**: Collects latitude, longitude, altitude, speed, and satellite information.
+- **Offline Storage**: Saves GPS data locally in JSON format on a USB pendrive.
+- **Auto-Remount**: Automatically remounts the USB drive if disconnected.
+- **Systemd Compatible**: Can be configured to run as a systemd service for automatic startup on boot.
+
+## Project Structure
+- **gps_logger.py**: Main script to collect GPS data and write it to a USB drive.
+- **gps_data.json**: JSON file on the USB pendrive where GPS data is stored.
+
+## Setup Instructions
+
+1. **Connect GPSD**: Ensure `gpsd` daemon is running and properly configured to provide GPS data.
+```sh
+sudo systemctl stop gpsd.service
+sudo systemctl stop gpsd.socket
+
+sudo systemctl disable gpsd.service
+sudo systemctl disable gpsd.socket
+
+sudo systemctl enable gpsd.service
+sudo systemctl enable gpsd.socket
+```
+
+2. **USB Configuration**:
+   - Ensure your USB drive is formatted and identified by its UUID.
+   - Update the `UUID` variable in `gps_logger.py` to match your USB drive's UUID.
+```sh
+lsblk -o NAME,UUID,MOUNTPOINT
+```   
+
+3. **System Requirements**:
+   - Install necessary dependencies in a Python virtual environment.
+```sh
+python3 -m venv gps-venv
+source gps-venv/bin/activate
+pip install -r requirements.txt
+```
+
+3. **Systemd Service Configuration**:
+   - Configure and enable the `gps_logger.py` service to start logging GPS data on USB disk.
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable gps_logger.service
+sudo systemctl start gps_logger.service
+
+sudo systemctl status gps_logger.service
+```
