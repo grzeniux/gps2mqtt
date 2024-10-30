@@ -27,3 +27,16 @@ This project publishes real-time GPS data to an MQTT broker, making it accessibl
 - Allows real-time data access and integration with other IoT systems.
 - Configurable MQTT settings, including server address, topics, and client ID.
 - Can run as a systemd service for automatic startup on boot.
+
+---
+
+## Summary of Differences
+
+| Feature               | GPS USB Data Logger                | GPS to MQTT Publisher            |
+|-----------------------|------------------------------------|----------------------------------|
+| **Primary Function**  | Logs GPS data to USB pendrive      | Publishes GPS data to MQTT       |
+| **Data Storage**      | JSON file on USB                   | Real-time MQTT topics            |
+| **Use Case**          | Offline data collection            | IoT and remote monitoring        |
+| **Systemd Service**   | Yes                                | Yes                              |
+| **Dependency on USB** | Required                           | Not required                     |
+| **Ideal For**         | Local data logging                 | Real-time networked applications |
