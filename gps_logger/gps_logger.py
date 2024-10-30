@@ -86,3 +86,51 @@ def read_gps_data():
 gps_thread = Thread(target=read_gps_data, daemon=True)
 gps_thread.start()
 
+try:
+    while True:
+        time.sleep(10)  # Delay between write checks
+        mount_usb()  # Ensure the pendrive remains mounted
+        
+        with data_lock:
+            # Check conditions for writing to the pendrive
+            print("Checking conditions for writing to pendrive...")
+            print("Pendrive mounted:", is_pendrive_mounted(), "| GPS log buffer has data:", bool(gps_data_log))
+
+            if is_pendrive_mounted() and gps_data_log:
+                # Attempt to write only if pendrive is mounted
+                file_path = os.path.join(MOUNT_POINT, "gps_data.json")
+                print("Attempting to write data to pendrive.")
+
+                try:
+                    # Code for saving GPS data to the pendrive
+                    if os.path.exists(file_path):
+                        with open(file_path, "r+") as f:
+                            try:
+                                existing_data = json.load(f)
+                                if not isinstance(existing_data, list):
+                                    existing_data = []
+                            except json.JSONDecodeError:
+                                existing_data = []
+                            existing_data.extend(gps_data_log)
+                            f.seek(0)
+                            json.dump(existing_data, f, indent=4)
+                            f.truncate()
+                            f.flush()
+                            os.fsync(f.fileno())
+                    else:
+                        with open(file_path, "w") as f:
+                            json.dump(gps_data_log, f, indent=4)
+                            f.flush()
+                            os.fsync(f.fileno())
+
+                    print("Data added to gps_data.json on pendrive.")
+                    gps_data_log.clear()  # Clear buffer after saving
+                except IOError as e:
+                    print(f"Error writing to file: {e}. Pendrive possibly disconnected.")
+                    remount_usb()  # Attempt to remount pendrive if there's an error
+
+            else:
+                print("Pendrive disconnected or no data to write. Data is buffered.")
+except KeyboardInterrupt:
+    print("Data collection terminated.")
+    unmount_usb()
