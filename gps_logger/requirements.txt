@@ -1,0 +1,5 @@
+gpsd-py3==0.3.0
+msgpack==1.0.8
+paho-mqtt==2.1.0
+pytz==2024.1
+typing_extensions==4.12.2
