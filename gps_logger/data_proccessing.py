@@ -2,7 +2,6 @@ import json
 import folium
 from folium.plugins import TimestampedGeoJson
 
-# Odczytaj dane GPS z pliku JSON
 try:
     with open("gps_data.json", "r") as f:
         gps_data = json.load(f)
@@ -10,10 +9,9 @@ except FileNotFoundError:
     print("Plik 'gps_data.json' nie został znaleziony.")
     exit(1)
 
-# Tworzenie struktury dla TimestampedGeoJson
 features_geojson = []
 for entry in gps_data:
-    # Konwersja pola 'time_utc' na timestamp do animacji
+     # Convert 'time_utc' field to timestamp for animation
     timestamp = entry['time_utc']
 
     features_geojson.append({
@@ -46,18 +44,18 @@ for entry in gps_data:
         }
     })
 
-# Utwórz mapę z punktami
+ # Create a map with points
 start_location = [features_geojson[0]['geometry']['coordinates'][1], features_geojson[0]['geometry']['coordinates'][0]]
 race_map = folium.Map(location=start_location, zoom_start=15)
 
-# Dodaj animowany TimestampedGeoJson do mapy
+# Add the animated TimestampedGeoJson to the map
 timestamped_geojson = TimestampedGeoJson({
     'type': 'FeatureCollection',
     'features': features_geojson,
 }, period='PT10S', add_last_point=True)
 timestamped_geojson.add_to(race_map)
 
-# Dodaj ramkę telemetryczną do mapy z aktualizacją danych
+# Add telemetry frame to map with data update
 race_map.get_root().html.add_child(folium.Element(f'''
     <div id="telemetry-data" style="position: fixed; top: 20px; right: 20px; 
         background-color: rgba(255, 255, 255, 0.8); padding: 10px; border: 2px solid black; z-index: 1000; width: 250px;">
@@ -103,6 +101,6 @@ race_map.get_root().html.add_child(folium.Element(f'''
     </script>
 '''))
 
-# Zapisz mapę do pliku HTML
+# Save the map to an HTML file
 race_map.save("animated_map_with_telemetry.html")
 print("Mapa z animacją i ramką telemetryczną została zapisana jako 'animated_map_with_telemetry.html'")
