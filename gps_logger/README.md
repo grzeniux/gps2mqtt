@@ -106,6 +106,21 @@ This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive
 # Result
 <img src="gps_map.png" alt="alt text" width="855" height="630">
 
+### Description of `gps_logger.py`
+
+The `gps_logger.py` script continuously logs GPS data to a USB drive, ensuring reliable storage even if the drive disconnects temporarily. Key functions include:
+
+- **GPS Data Collection**: Connects to `gpsd` to read and buffer GPS data (latitude, longitude, altitude, speed, etc.) using a separate thread.
+- **USB Mount Management**: Ensures the USB drive is mounted at `/mnt/pendrive`. It automatically remounts if disconnected, maintaining data availability.
+- **Data Storage**: Periodically writes buffered GPS data to `gps_data.json` on the USB drive. If the file exists, it appends new data; if not, it creates the file.
+- **Error Handling**: Detects disconnections during writing, attempts to remount, and logs any issues. Clears the buffer after each successful write.
+
+This script is designed for continuous, reliable GPS data logging to a USB drive, handling disconnections automatically.
+
+---
+
+### Description of `gps_data_processing.py`
+
 The `gps_data_processing.py` script processes and visualizes the GPS data logged by `gps_logger.py`. Key functionalities include:
 
 - **Data Parsing**: Reads and structures GPS data from `gps_data.json`.
