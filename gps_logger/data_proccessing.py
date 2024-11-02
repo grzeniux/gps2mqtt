@@ -8,7 +8,7 @@ try:
     with open("gps_data.json", "r") as f:
         gps_data = json.load(f)
 except FileNotFoundError:
-    print("File 'gps_data.json' not found.")
+    print("File 'gps_data.json' not found")
     exit(1)
 
 utc_tz = pytz.utc
