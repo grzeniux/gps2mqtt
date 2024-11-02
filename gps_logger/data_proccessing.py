@@ -67,5 +67,5 @@ timestamped_geojson = TimestampedGeoJson({
 }, period='PT10S', add_last_point=True)
 timestamped_geojson.add_to(race_map)
 
-race_map.save("animated_map_with_polish_time.html")
-print("Map with animation and clickable popups saved as 'animated_map_with_polish_time.html'")
+race_map.save("animated_map.html")
+print("Map with animation and clickable popups saved as 'animated_map.html'")
