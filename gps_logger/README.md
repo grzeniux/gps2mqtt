@@ -106,11 +106,12 @@ This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive
 # Result
 <img src="gps_map.png" alt="alt text" width="855" height="630">
 
-The gps_data_processing.py script processes and visualizes the GPS data logged by gps_logger.py. Key functionalities include:
+The `gps_data_processing.py` script processes and visualizes the GPS data logged by `gps_logger.py`. Key functionalities include:
 
-Data Parsing: Reads and structures GPS data from gps_data.json.
-Map Visualization: Generates an interactive map with the GPS route, color-coded by speed, altitude, and other metrics. Markers along the route show details when clicked.
-Route Animation: Animates the recorded path to show travel progression over time.
-Time Conversion: Converts timestamps from UTC to local time for better readability.
-HTML Export: Saves the final interactive map as animated_map_with_polish_time.html for easy viewing in a browser.
+- **Data Parsing**: Reads and structures GPS data from `gps_data.json`.
+- **Map Visualization**: Generates an interactive map with the GPS route, color-coded by speed, altitude, and other metrics. Markers along the route show details when clicked.
+- **Route Animation**: Animates the recorded path to show travel progression over time.
+- **Time Conversion**: Converts timestamps from UTC to local time for better readability.
+- **HTML Export**: Saves the final interactive map as `animated_map.html` for easy viewing in a browser.
+
 This script transforms raw GPS logs into an interactive format, making it easy to review and analyze travel routes.
