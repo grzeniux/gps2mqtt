@@ -106,7 +106,7 @@ This project logs GPS data from the GPSD daemon to a JSON file on a USB pendrive
 # Result
 <img src="gps_map.png" alt="alt text" width="855" height="630">
 
-### Description of `gps_logger.py`
+## Description of `gps_logger.py`
 
 The `gps_logger.py` script continuously logs GPS data to a USB drive, ensuring reliable storage even if the drive disconnects temporarily. Key functions include:
 
@@ -119,7 +119,7 @@ This script is designed for continuous, reliable GPS data logging to a USB drive
 
 ---
 
-### Description of `gps_data_processing.py`
+## Description of `gps_data_processing.py`
 
 The `gps_data_processing.py` script processes and visualizes the GPS data logged by `gps_logger.py`. Key functionalities include:
 
@@ -130,3 +130,35 @@ The `gps_data_processing.py` script processes and visualizes the GPS data logged
 - **HTML Export**: Saves the final interactive map as `animated_map.html` for easy viewing in a browser.
 
 This script transforms raw GPS logs into an interactive format, making it easy to review and analyze travel routes.
+
+---
+## Description of `test_gps_data_integrity.py`
+
+The `test_gps_data_integrity.py` script is a unit testing suite designed to ensure the integrity and accuracy of GPS data logged by `gps_logger.py`. Its core functionalities include:
+
+- **Data Parsing**: Loads GPS data from `gps_data.json` for analysis and validation.
+- **Duplicate Frame Detection**: Ensures no two GPS data frames have identical latitude, longitude, and timestamp values.
+- **Coordinate Change Validation**: Verifies that the GPS coordinates vary over time, flagging cases where the device remains stationary.
+- **Realistic Speed Checks**: Confirms that reported speeds fall within a plausible range (0 to 300 km/h).
+- **Realistic Altitude Checks**: Validates that altitude values are between 0 and 1000 meters.
+- **Timestamp Continuity**: Ensures all timestamps are in chronological order, flagging anomalies such as out-of-sequence data.
+
+This script is a critical tool for maintaining data quality, with detailed error reporting to help identify issues such as:
+
+- **Example frames error**
+  ```plaintext
+    FAIL: test_unique_frames (__main__.TestGPSDataIntegrity)
+    AssertionError: Duplicate frame found: {'latitude': 50.061, 'longitude': 19.937, 'time_utc': '2024-10-30T15:13:00Z'}
+
+    FAIL: test_coordinate_changes (__main__.TestGPSDataIntegrity)
+    AssertionError: Stationary GPS detected at frame 12: {'latitude': 50.061, 'longitude': 19.937, 'time_utc': '2024-10-30T15:20:00Z'}
+
+    FAIL: test_realistic_speed (__main__.TestGPSDataIntegrity)
+    AssertionError: Unrealistic speed detected: 500 km/h in frame {'latitude': 50.062, 'longitude': 19.940, 'speed_kmh': 500}
+
+    FAIL: test_realistic_altitude (__main__.TestGPSDataIntegrity)
+    AssertionError: Unrealistic altitude detected: 10000 m in frame {'latitude': 50.062, 'longitude': 19.937, 'altitude': 10000, 'time_utc': '2024-10-30T15:13:00Z'}
+
+    FAIL: test_time_continuity (__main__.TestGPSDataIntegrity)
+    AssertionError: Timestamps out of order: 2024-10-30T15:13:00Z -> 2024-10-30T15:12:00Z
+---
